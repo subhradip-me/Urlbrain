@@ -11,6 +11,9 @@ import previewUrlRoutes from './src/routes/previewUrl.routes.js';
 import analyticsRoutes from './src/routes/analytics.routes.js';
 import clickHeatmapRoutes from './src/routes/clickHeatmap.routes.js';
 import statsRoutes from './src/routes/stats.routes.js';
+
+import aiRoutes from './src/routes/ai.routes.js';
+
 import { redirectFromShortUrl } from './src/controllers/shortUrl.controller.js';
 
 dotenv.config();
@@ -34,6 +37,8 @@ app.use('/api/urlPreview', previewUrlRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/analytics', clickHeatmapRoutes); // Add this line
 app.use('/api/stats', statsRoutes);
+
+app.use('/api/ai', aiRoutes);
 
 
 // Place catch-all short URL redirect AFTER all /api routes

@@ -1,33 +1,77 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { BiLink } from "react-icons/bi";
 import { IoIosStats } from "react-icons/io";
 import { FaPaste, FaCopy } from "react-icons/fa";
 import { API } from '../api/auth';
+import { aiSuggest, aiSummarize } from '../ai/ai';
 import ShortedUrls from './ShortedUrls';
-
-
+import SummaryPopup from './SummaryPopup';
 
 export default function UrlShortner({ setActiveTab }) {
   const inputRef = useRef(null);
   const [slug, setSlug] = useState('');
   const [previewData, setPreviewData] = useState(null);
   const [shortUrl, setShortUrl] = useState(null);
+  
+  // AI-related state variables
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiTags, setAiTags] = useState([]);
+  const [aiCategory, setAiCategory] = useState('');
+  const [aiSummary, setAiSummary] = useState('');
+  const [showSummaryPopup, setShowSummaryPopup] = useState(false);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (window.previewTimeout) {
+        clearTimeout(window.previewTimeout);
+      }
+    };
+  }, []);
 
   const handlePaste = async () => {
     try {
       const url = await navigator.clipboard.readText();
       if (inputRef.current) inputRef.current.value = url;
 
-      // 🔥 Fetch metadata preview from your backend (to be implemented below)
+      // Fetch preview after pasting
+      await fetchPreview(url);
+    } catch (err) {
+      console.error('Paste Error:', err);
+    }
+  };
+
+  const fetchPreview = async (url) => {
+    if (!url || !url.trim() || !/^https?:\/\//.test(url)) {
+      setPreviewData(null);
+      return;
+    }
+
+    try {
+      console.log('Fetching preview for:', url);
       const res = await API.get('/urlPreview', {
         params: { url }
       });
-
       setPreviewData(res.data);
     } catch (err) {
       console.error('Preview Fetch Error:', err);
       setPreviewData(null);
     }
+  };
+
+  const handleInputChange = (e) => {
+    const url = e.target.value;
+    
+    // Clear AI results when URL changes
+    setAiTags([]);
+    setAiCategory('');
+    setAiSummary('');
+    
+    // Debounce the preview fetch to avoid too many requests
+    clearTimeout(window.previewTimeout);
+    window.previewTimeout = setTimeout(() => {
+      fetchPreview(url);
+    }, 500); // Wait 500ms after user stops typing
   };
 
 const handleShorten = async () => {
@@ -46,18 +90,117 @@ const handleShorten = async () => {
     console.log("Sending payload:", payload);
 
     const res = await API.post('/shortUrls', payload);
+    console.log("✅ Success response:", res.data);
     setShortUrl(res.data.shortUrl);
   } catch (err) {
-    console.error('Shorten Error:', err);
-    if (err.response) {
-      console.error('Server Response:', err.response.data);
+    console.error('❌ Shorten Error:', err);
+    console.error('❌ Error details:', {
+      message: err.message,
+      status: err.response?.status,
+      statusText: err.response?.statusText,
+      data: err.response?.data,
+      config: err.config
+    });
+    
+    // Show user-friendly error message
+    const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Failed to shorten URL';
+    alert(`Error: ${errorMessage}`);
+  }
+};
+
+const handleAISuggest = async () => {
+  const url = inputRef.current?.value;
+  if (!url || !url.trim()) {
+    alert('Please enter a URL first to get AI suggestions');
+    return;
+  }
+  
+  if (!/^https?:\/\//.test(url)) {
+    alert('Please enter a valid URL starting with http:// or https://');
+    return;
+  }
+  
+  setAiLoading(true);
+  try {
+    console.log('Starting AI suggest for URL:', url);
+    const result = await aiSuggest(url);
+    console.log('AI suggest result:', result);
+    
+    setAiTags(result.tags || []);
+    setAiCategory(result.category || "");
+    setAiLoading(false);
+  } catch (err) {
+    console.error('AI Suggest Error:', err);
+    
+    let errorMessage = 'Failed to get AI suggestions. Please try again.';
+    
+    if (err.response?.status === 401) {
+      errorMessage = 'Authentication required. Please log in first.';
+    } else if (err.response?.status === 400) {
+      errorMessage = 'Invalid URL provided for AI analysis.';
+    } else if (err.response?.status >= 500) {
+      errorMessage = 'Server error. Please try again later.';
+    } else if (err.response?.data?.error) {
+      errorMessage = err.response.data.error;
     }
+    
+    alert(errorMessage);
+    setAiLoading(false);
+  }
+};
+
+const handleAISummary = async () => {
+  const url = inputRef.current?.value;
+  if (!url || !url.trim()) {
+    alert('Please enter a URL first to get AI summary');
+    return;
+  }
+  
+  if (!/^https?:\/\//.test(url)) {
+    alert('Please enter a valid URL starting with http:// or https://');
+    return;
+  }
+  
+  setAiLoading(true);
+  try {
+    console.log('Starting AI summary for URL:', url);
+    const result = await aiSummarize(url);
+    console.log('AI summary result:', result);
+    
+    setAiSummary(result.summary || "");
+    setShowSummaryPopup(true); // Show popup instead of inline display
+    setAiLoading(false);
+  } catch (err) {
+    console.error('AI Summary Error:', err);
+    
+    let errorMessage = 'Failed to generate AI summary. Please try again.';
+    
+    if (err.response?.status === 401) {
+      errorMessage = 'Authentication required. Please log in first.';
+    } else if (err.response?.status === 400) {
+      errorMessage = 'Invalid URL provided for AI analysis.';
+    } else if (err.response?.status >= 500) {
+      errorMessage = 'Server error. Please try again later.';
+    } else if (err.response?.data?.error) {
+      errorMessage = err.response.data.error;
+    }
+    
+    alert(errorMessage);
+    setAiLoading(false);
   }
 };
 
 
   const handleCopy = () => {
     if (shortUrl) navigator.clipboard.writeText(shortUrl);
+  };
+
+  const handleSummaryEdit = (editedSummary) => {
+    setAiSummary(editedSummary);
+  };
+
+  const handleCloseSummaryPopup = () => {
+    setShowSummaryPopup(false);
   };
 
   return (
@@ -90,6 +233,7 @@ const handleShorten = async () => {
                 type="text"
                 placeholder="Enter URL here"
                 ref={inputRef}
+                onChange={handleInputChange}
                 className='w-full px-4 py-2 rounded-xl bg-zinc-50 shadow-lg shadow-zinc-400 focus:outline-none focus:bg-zinc-50 focus:shadow-fuchsia-200'
               />
               <button
@@ -119,10 +263,59 @@ const handleShorten = async () => {
               </div>
             )}
 
+            {/* AI Features */}
+            <div className="flex gap-2 mt-4">
+              <button 
+                onClick={handleAISuggest} 
+                disabled={aiLoading}
+                className="px-3 py-1 rounded bg-emerald-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-emerald-700 transition cursor-pointer"
+              >
+                {aiLoading ? "Thinking..." : "Suggest Tags"}
+              </button>
+              <button 
+                onClick={handleAISummary} 
+                disabled={aiLoading}
+                className="px-3 py-1 rounded bg-zinc-900 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-zinc-600 transition  cursor-pointer"
+              >
+                {aiLoading ? "Summarizing..." : "Summarize"}
+              </button>
+            </div>
+
+            {(aiCategory || aiTags.length > 0) && (
+              <div className="mt-3 text-sm w-96">
+                {aiCategory && <p><b>Category:</b> {aiCategory}</p>}
+                {aiTags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {aiTags.map((tag, index) => (
+                      <span key={index} className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Show summary status when available */}
+            {aiSummary && !showSummaryPopup && (
+              <div className="mt-3 text-sm bg-blue-50 p-3 w-96 rounded-lg border border-blue-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-blue-800 font-medium">✓ Summary generated</span>
+                  <button
+                    onClick={() => setShowSummaryPopup(true)}
+                    className="text-blue-600 hover:text-blue-800 text-sm underline cursor-pointer"
+                  >
+                    View Summary
+                  </button>
+                </div>
+              </div>
+            )}
+
+
             {/* Shorten Button */}
             <button
               onClick={handleShorten}
-              className='bg-zinc-900 rounded-md hover:bg-zinc-700 hover:shadow-lg hover:shadow-fuchsia-100 text-zinc-50 px-4 py-2 mt-4 w-96'
+              className='bg-zinc-900 rounded-md hover:bg-zinc-700 hover:shadow-lg hover:shadow-fuchsia-100 text-zinc-50 px-4 py-2 mt-4 w-96 cursor-pointer'
             >
               Shorten
             </button>
@@ -159,6 +352,15 @@ const handleShorten = async () => {
         
         </div>
       </div>
+
+      {/* Summary Popup */}
+      {showSummaryPopup && aiSummary && (
+        <SummaryPopup
+          summary={aiSummary}
+          onClose={handleCloseSummaryPopup}
+          onEdit={handleSummaryEdit}
+        />
+      )}
     </div>
   );
 }

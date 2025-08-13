@@ -1,26 +1,42 @@
-import { getShortUrl } from '../services/shortUrl.service.js';
+import { getShortUrl, createShortUrlWithUser, createShortUrlWithoutUser } from '../services/shortUrl.service.js';
 import Click from '../models/click.model.js';
 import geoip from 'geoip-lite';
 import useragent from 'useragent';
 
 export const createShortUrl = async (req, res) => {
   try {
+    console.log("🔍 createShortUrl called with:", {
+      body: req.body,
+      user: req.user,
+      headers: req.headers.authorization ? "Token present" : "No token"
+    });
+
     const data = req.body;
     let urlData;
 
     if (req.user && req.user.id) {
+      console.log("✅ Creating URL with user:", req.user.id);
       urlData = await createShortUrlWithUser(data.url, req.user.id, data.slug);
     } else {
+      console.log("✅ Creating URL without user");
       urlData = await createShortUrlWithoutUser(data.url, data.slug);
     }
+
+    console.log("✅ URL created successfully:", urlData);
 
     const response = {
       ...urlData._doc,  // full document: _id, full_url, short_url, clicks, etc.
       shortUrl: `${process.env.APP_URL}/${urlData.short_url}`,  // extra computed field
     };
 
+    console.log("✅ Sending response:", response);
     res.status(200).json(response);
   } catch (err) {
+    console.error("❌ createShortUrl error:", {
+      message: err.message,
+      stack: err.stack,
+      status: err.status
+    });
     res.status(err.status || 500).json({ message: err.message || "Server error" });
   }
 };

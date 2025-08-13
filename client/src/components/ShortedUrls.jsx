@@ -67,7 +67,7 @@ export default function ShortedUrls() {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Your Shortened URLs</h2>
+      <h2 className="text-xl absolute top-32 font-bold mb-4">Your Shortened URLs</h2>
       {error && <p className="text-red-500 mb-2">{error}</p>}
       {urls.length === 0 ? (
         <p>No shortened URLs found.</p>
