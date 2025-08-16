@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from 'react';
 import { FaCopy, FaEdit, FaTimes, FaGripLines } from 'react-icons/fa';
 
@@ -194,6 +195,41 @@ export default function SummaryPopup({ summary, onClose, onEdit }) {
             clipPath: 'polygon(100% 0%, 0% 100%, 100% 100%)'
           }}
         />
+=======
+import React from 'react';
+
+export default function SummaryPopup({ summary, onClose, onEdit }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">AI Summary</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 text-xl"
+          >
+            ×
+          </button>
+        </div>
+        
+        <div className="mb-4">
+          <textarea
+            value={summary}
+            onChange={(e) => onEdit(e.target.value)}
+            className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="AI summary will appear here..."
+          />
+        </div>
+        
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+          >
+            Close
+          </button>
+        </div>
+>>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
+<<<<<<< HEAD
 import authRoutes from './src/routes/auth.routes.js';
 import urlRoutes from './src/routes/saveUrl.routes.js';
 import userRoutes from './src/routes/user.routes.js';
@@ -15,6 +16,21 @@ import statsRoutes from './src/routes/stats.routes.js';
 import aiRoutes from './src/routes/ai.routes.js';
 
 import { redirectFromShortUrl } from './src/controllers/shortUrl.controller.js';
+=======
+// Import modular routes
+import authRoutes from './src/features/auth/routes/authRoutes.js';
+import urlRoutes from './src/routes/saveUrl.routes.js';
+import userRoutes from './src/routes/user.routes.js';
+import shortUrlRoutes from './src/features/url/routes/shortUrlRoutes.js';
+import previewUrlRoutes from './src/routes/previewUrl.routes.js';
+import analyticsRoutes from './src/features/analytics/routes/analyticsRoutes.js';
+import clickHeatmapRoutes from './src/routes/clickHeatmap.routes.js';
+import statsRoutes from './src/routes/stats.routes.js';
+
+import aiRoutes from './src/features/ai/routes/aiRoutes.js';
+
+import { redirectFromShortUrl } from './src/features/url/controllers/shortUrlController.js';
+>>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
 
 dotenv.config();
 const app = express();

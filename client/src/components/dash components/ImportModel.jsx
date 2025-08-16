@@ -1,7 +1,11 @@
 import React, { useRef } from 'react'
 import Papa from "papaparse";
 import { FaTimes } from "react-icons/fa";
+<<<<<<< HEAD
 import { API } from '../../api/API';
+=======
+import { API } from '../../api/auth';
+>>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
 
 export default function ImportModel({ onClose, setUrlData, urlData }) {
   const fileInputRef = useRef();

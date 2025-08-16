@@ -3,7 +3,11 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaFileExport } from "react-icons/fa";
 import Graph from './Graph';
 import ClickHeatmap from './ClickHeatmap';
+<<<<<<< HEAD
 import { API } from '../../../api/API';
+=======
+import { API } from '../../../api/auth';
+>>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
 
 export default function Analytics() {
   const [range, setRange] = useState("7days");
