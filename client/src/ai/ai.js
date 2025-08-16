@@ -1,9 +1,9 @@
-import { API } from "../api/API";
+import { aiAPI } from "../api/API";
 
 export const aiSuggest = async (url) => {
   try {
     console.log("Making AI suggest request for URL:", url);
-    const { data } = await API.post("/ai/suggest", { url });
+    const data = await aiAPI.suggest(url);
     console.log("AI suggest response:", data);
     return data; // { url, tags:[], category:"" }
   } catch (error) {
@@ -21,7 +21,7 @@ export const aiSuggest = async (url) => {
 export const aiSummarize = async (url) => {
   try {
     console.log("Making AI summarize request for URL:", url);
-    const { data } = await API.post("/ai/summarize", { url });
+    const data = await aiAPI.summarize(url);
     console.log("AI summarize response:", data);
     return data; // { url, summary:"..." }
   } catch (error) {

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { BiLink } from "react-icons/bi";
 import { IoIosStats } from "react-icons/io";
 import { FaPaste, FaCopy } from "react-icons/fa";
-import { API } from '../../../api/auth';
+import { urlAPI } from '../../../api/API';
 import { aiSuggest, aiSummarize } from '../../../ai/ai';
 import ShortedUrls from './ShortedUrls';
 import SummaryPopup from './SummaryPopup';
@@ -49,10 +49,8 @@ export default function UrlShortener({ setActiveTab }) {
 
     try {
       console.log('Fetching preview for:', url);
-      const res = await API.get('/urlPreview', {
-        params: { url }
-      });
-      setPreviewData(res.data);
+      const data = await urlAPI.getPreview(url);
+      setPreviewData(data);
     } catch (err) {
       console.error('Preview Fetch Error:', err);
       setPreviewData(null);
@@ -89,9 +87,9 @@ const handleShorten = async () => {
 
     console.log("Sending payload:", payload);
 
-    const res = await API.post('/shortUrls', payload);
-    console.log("✅ Success response:", res.data);
-    setShortUrl(res.data.shortUrl);
+    const data = await urlAPI.shortenUrl(payload);
+    console.log("✅ Success response:", data);
+    setShortUrl(data.shortUrl);
   } catch (err) {
     console.error('❌ Shorten Error:', err);
     console.error('❌ Error details:', {
@@ -103,7 +101,7 @@ const handleShorten = async () => {
     });
     
     // Show user-friendly error message
-    const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Failed to shorten URL';
+    const errorMessage = err.message || err.error || 'Failed to shorten URL';
     alert(`Error: ${errorMessage}`);
   }
 };

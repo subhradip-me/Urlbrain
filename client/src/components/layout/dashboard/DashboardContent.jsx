@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaHeading, FaLink, FaInfoCircle, FaEdit, FaTrash, FaCopy, FaFileImport, FaFileExport } from 'react-icons/fa'
 import { FiClipboard, FiInfo } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
-import { API } from '../../../api/auth';
+import { urlAPI } from '../../../api/API';
 
 import ImportModel from '../../dash components/ImportModel';
 import ExportModel from '../../dash components/ExportModel';

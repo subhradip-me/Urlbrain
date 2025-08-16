@@ -1,11 +1,11 @@
-import { API } from '../../../api/auth';
+import { aiAPI } from '../../../api/API';
 
 class AiService {
   // AI Suggest - Get tags and category suggestions for a URL
   async suggest(url) {
     try {
-      const response = await API.post('/ai/suggest', { url });
-      return response.data;
+      const response = await aiAPI.suggest(url);
+      return response;
     } catch (error) {
       this.handleError(error, 'Failed to get AI suggestions');
     }
@@ -14,8 +14,8 @@ class AiService {
   // AI Summarize - Generate summary for a URL
   async summarize(url) {
     try {
-      const response = await API.post('/ai/summarize', { url });
-      return response.data;
+      const response = await aiAPI.summarize(url);
+      return response;
     } catch (error) {
       this.handleError(error, 'Failed to generate AI summary');
     }
@@ -24,8 +24,8 @@ class AiService {
   // AI Optimize - Optimize URL description/title
   async optimize(content) {
     try {
-      const response = await API.post('/ai/optimize', { content });
-      return response.data;
+      const response = await aiAPI.optimize(content);
+      return response;
     } catch (error) {
       this.handleError(error, 'Failed to optimize content');
     }

@@ -3,7 +3,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaFileExport } from "react-icons/fa";
 import Graph from './Graph';
 import ClickHeatmap from './ClickHeatmap';
-import { API } from '../../../api/auth';
+import { analyticsAPI } from '../../../api/API';
 
 export default function Analytics() {
   const [range, setRange] = useState("7days");
@@ -47,26 +47,18 @@ export default function Analytics() {
       setError("");
       try {
         // Fetch chart and basic stats
-        const res = await API.get("/analytics", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
+        const analytics = await analyticsAPI.getAnalytics();
         
         // Fetch top stats (location, device, referrer)
-        const statsRes = await API.get("/stats/top", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
+        const topStats = await analyticsAPI.getStats();
         
-        setChart(res.data.chart);
+        setChart(analytics.chart);
         // Merge the analytics stats with top stats
         setStats({
-          clicks: res.data.stats.clicks,
-          location: statsRes.data.location,
-          device: statsRes.data.device,
-          referrer: statsRes.data.referrer
+          clicks: analytics.stats.clicks,
+          location: topStats.location,
+          device: topStats.device,
+          referrer: topStats.referrer
         });
       } catch (err) {
         setError("Failed to load analytics");
@@ -81,12 +73,8 @@ export default function Analytics() {
   useEffect(() => {
     async function fetchHeatmapData() {
       try {
-        const res = await API.get('/analytics/heatmap', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
-        setHeatmapData(res.data.heatmap);
+        const heatmapData = await analyticsAPI.getClickHeatmap();
+        setHeatmapData(heatmapData.heatmap);
       } catch (err) {
         console.error("Failed to load heatmap data", err);
       }

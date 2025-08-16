@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API } from '../../../api/auth.js';
+import { urlAPI } from '../../../api/API';
 import { IoIosStats } from "react-icons/io";
 import { FiMoreVertical, FiCopy, FiEye, FiTrash2, FiShare2 } from "react-icons/fi";
 
@@ -12,17 +12,14 @@ export default function ShortedUrls() {
   useEffect(() => {
     const getUserUrls = async () => {
       try {
-        const res = await API.get('/shortUrls', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setUrls(res.data);
-      } catch (err) {
-        console.error('Error fetching URLs:', err);
-        setError('Failed to fetch short URLs');
+        const data = await urlAPI.getUrls();
+        setUrls(data);
+      } catch (error) {
+        console.error('Error fetching URLs:', error);
+        setError('Failed to load URLs');
       }
     };
+
     getUserUrls();
   }, []);
 
@@ -55,11 +52,10 @@ export default function ShortedUrls() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this short URL?")) return;
     try {
-      await API.delete(`/shortUrls/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      await urlAPI.deleteUrl(id);
       setUrls(urls.filter(u => u._id !== id));
-    } catch {
+    } catch (error) {
+      console.error('Delete error:', error);
       alert("Failed to delete.");
     }
     setActiveMenu(null);
