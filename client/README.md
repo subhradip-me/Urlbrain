@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # UrlBrain - URL Management Application
 
 A comprehensive URL management application built with React + Vite that helps users organize, shorten, and analyze their URLs with advanced features like AI-powered suggestions, analytics, and bookmarking.
@@ -400,7 +399,6 @@ The project uses utility-first CSS with custom glassmorphism effects:
 npm run build
 ```
 
-<<<<<<< HEAD
 2. **Deploy to your hosting platform**
 - The `dist` folder contains the production build
 - Configure your server to serve the React app

@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { API } from '../../../api/auth.js';
-=======
-<<<<<<< HEAD
-import { API } from '../../../api/API.js';
-=======
-import { API } from '../../../api/auth.js';
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
 import { IoIosStats } from "react-icons/io";
 import { FiMoreVertical, FiCopy, FiEye, FiTrash2, FiShare2 } from "react-icons/fi";
 

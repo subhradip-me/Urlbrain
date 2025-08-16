@@ -1,34 +1,27 @@
 import React, { useState } from "react";
 import { Link, BarChart3, Globe, Shield, Copy } from "lucide-react";
-<<<<<<< HEAD
 import { Header } from "../components/navigation";
-=======
-<<<<<<< HEAD
-import Header from "../components/navigation/Header";
-=======
-import { Header } from "../components/navigation";
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
 import axios from "axios"
 
 export default function HomePage() {
-  const [url, setValue] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const [shortUrl, setShortUrl] = useState("");
+  const [_url, _setUrl] = useState("");
+  const [_showPopup, _setShowPopup] = useState(false);
+  const [_shortUrl, _setShortUrl] = useState("");
 
-  const getUrl = async () => {
+  const _handleShorten = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3000/api/create", { url });
+      const { data } = await axios.post("http://localhost:3000/api/create", { _url });
       console.log(data.shortUrl);
-      setShortUrl(data.shortUrl);
-      setShowPopup(true);
+      _setShortUrl(data.shortUrl);
+      _setShowPopup(true);
     } catch (error) {
-      setShortUrl("Error shortening URL");
-      setShowPopup(true);
+      console.error('Error shortening URL:', error);
+      _setShortUrl("Error shortening URL");
+      _setShowPopup(true);
     }
   };
 
-  console.log(url);
+  console.log(_url);
 
   return (
     <div className="h-screen bg-gray-50 relative overflow-hidden">

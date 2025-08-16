@@ -24,7 +24,7 @@ class AiService {
   // AI Optimize - Optimize URL description/title
   async optimize(content) {
     try {
-      const response = await apiClient.post(API_ENDPOINTS.AI.OPTIMIZE, { content });
+      const response = await API.post('/ai/optimize', { content });
       return response.data;
     } catch (error) {
       this.handleError(error, 'Failed to optimize content');

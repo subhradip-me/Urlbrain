@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaHeading, FaLink, FaInfoCircle, FaEdit, FaTrash, FaCopy, FaFileImport, FaFileExport } from 'react-icons/fa'
 import { FiClipboard, FiInfo } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
-<<<<<<< HEAD
 import { API } from '../../../api/auth';
-=======
-import { API } from '../../../api/API';
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
 
 import ImportModel from '../../dash components/ImportModel';
 import ExportModel from '../../dash components/ExportModel';
@@ -344,7 +340,7 @@ const handleSubmit = async (e) => {
                           onClick={async () => {
                             try {
                               const token = localStorage.getItem('token');
-                              const config = {
+                              const _config = {
                                 headers: { Authorization: `Bearer ${token}` }
                               };
                               await API.delete(`/urls/${item._id}`);
@@ -395,5 +391,3 @@ const handleSubmit = async (e) => {
     </>
   )
 }
-
-

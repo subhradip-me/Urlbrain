@@ -1,5 +1,4 @@
 import React from 'react';
-import DashboardContent from './dashboard/DashboardContent';
 import { UrlShortener } from '../../features/url-management';
 import { Analytics } from '../../features/analytics';
 import { Settings } from '../../features/settings';

@@ -1,19 +1,7 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
 import { API } from "../../../api/auth";
 
 export default function Authentication() {
-=======
-<<<<<<< HEAD
-import { API } from "../../../api/API";
-
-export default function Authentication() {
-=======
-import { API } from "../../../api/auth";
-
-export default function LoginForm() {
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
   const [showLogin, setShowLogin] = useState(true);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -51,15 +39,7 @@ export default function LoginForm() {
       });
       localStorage.setItem("token", res.data.token);
       alert("Registration successful!");
-<<<<<<< HEAD
       window.location.href = "/dashboard";
-=======
-<<<<<<< HEAD
-      window.location.href = "/dashboard";
-=======
-      window.location.href = "/form";
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
     }
