@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { Link, BarChart3, Globe, Shield, Copy } from "lucide-react";
-<<<<<<< HEAD
-import { Header } from "../components/navigation";
-=======
-<<<<<<< HEAD
-import Header from "../components/navigation/Header";
-=======
-import { Header } from "../components/navigation";
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
+import Header from "../components/Header";
 import axios from "axios"
 
 export default function HomePage() {

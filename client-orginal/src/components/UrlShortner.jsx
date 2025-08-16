@@ -2,26 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import { BiLink } from "react-icons/bi";
 import { IoIosStats } from "react-icons/io";
 import { FaPaste, FaCopy } from "react-icons/fa";
-<<<<<<< HEAD
-import { API } from '../../../api/auth';
-import { aiSuggest, aiSummarize } from '../../../ai/ai';
+import { API } from '../api/auth';
+import { aiSuggest, aiSummarize } from '../ai/ai';
 import ShortedUrls from './ShortedUrls';
 import SummaryPopup from './SummaryPopup';
 
 export default function UrlShortner({ setActiveTab }) {
-=======
-<<<<<<< HEAD
-import { API } from '../../../api/API';
-import { aiSuggest, aiSummarize } from '../../../ai/ai';
-=======
-import { API } from '../../../api/auth';
-import { aiService } from '../../ai-features';
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
-import ShortedUrls from './ShortedUrls';
-import SummaryPopup from './SummaryPopup';
-
-export default function UrlShortener({ setActiveTab }) {
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
   const inputRef = useRef(null);
   const [slug, setSlug] = useState('');
   const [previewData, setPreviewData] = useState(null);
@@ -137,15 +123,7 @@ const handleAISuggest = async () => {
   setAiLoading(true);
   try {
     console.log('Starting AI suggest for URL:', url);
-<<<<<<< HEAD
     const result = await aiSuggest(url);
-=======
-<<<<<<< HEAD
-    const result = await aiSuggest(url);
-=======
-    const result = await aiService.suggest(url);
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
     console.log('AI suggest result:', result);
     
     setAiTags(result.tags || []);
@@ -186,15 +164,7 @@ const handleAISummary = async () => {
   setAiLoading(true);
   try {
     console.log('Starting AI summary for URL:', url);
-<<<<<<< HEAD
     const result = await aiSummarize(url);
-=======
-<<<<<<< HEAD
-    const result = await aiSummarize(url);
-=======
-    const result = await aiService.summarize(url);
->>>>>>> 5c9b99c11acdb181bb1f938da662b02bbe620673
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
     console.log('AI summary result:', result);
     
     setAiSummary(result.summary || "");

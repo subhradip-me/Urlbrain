@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { API } from "../api/auth";
-=======
-import { API } from "../api/API";
->>>>>>> b843a51665704229e8d1f657919ce2d1e1395163
 
 export const aiSuggest = async (url) => {
   try {
